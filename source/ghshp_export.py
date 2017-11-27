@@ -48,6 +48,9 @@ except:
 
 import rhinoscriptsyntax as rs
 
+def str_to_hex(value):
+	"".join(["/x%02x" % ord(c) for c in value])
+
 def list2branch(source_tree,data,item_index,data_path):
     _p = GH_Path(data_path).AppendElement(item_index)
     for i in range(len(data)):
@@ -204,7 +207,7 @@ def write_shapefile(file_path, st, geom, fields, data, enc):
         # TEMP
         # encode strings to ASCII with ignore
         # to prevent the same exception in pyshp
-        r = [r.encode("ascii", 'ignore') if type(r) in [str, unicode] else r for r in record]
+        r = [str_to_hex(r) if type(r) in [str, unicode] else r for r in record]
         w.record(*r)
     
     try:
